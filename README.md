@@ -1,6 +1,6 @@
 # 🧬 Pancreatic Cancer Survival Prediction Project
 
-## 📖 Introduction
+## Introduction
 
 Pancreatic cancer is one of the most lethal malignancies worldwide, with a five-year survival rate of less than 10%. This is largely due to late-stage diagnosis and the aggressive nature of the disease. Predicting survival at diagnosis remains a major challenge in oncology and limits clinicians’ ability to personalize care and allocate treatments effectively.
 
@@ -43,7 +43,7 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 - Encoded categorical values and scaled numeric columns
 - Defined target variable which is the Overall Survival Status
 
-## 📊 Exploratory Data Analysis (EDA)
+## Exploratory Data Analysis (EDA)
 
 - Distribution of survival status and tumor stage
 - Age, Tumor Mutational Burden (TMB), Tumor Purity trends
