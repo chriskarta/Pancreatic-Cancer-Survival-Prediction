@@ -14,8 +14,6 @@ Despite the rich availability of clinical and genomic data, survival prediction 
 
 This project aims to develop a machine learning model that predicts survival outcomes for pancreatic cancer patients using a curated clinical-genomic dataset. The ultimate goal is to improve risk stratification and aid clinical decision-making.
 
----
-
 ## Project Objectives
 
 - Extract and isolate pancreatic cancer cases from the broader MSK-CHORD dataset (25,000+ patients).
