@@ -8,8 +8,6 @@ This project explores how machine learning models can help predict the survival 
 
 Pancreatic cancer is known for its poor prognosis and late detection. This project aims to build predictive models to classify patients into two categories: living (0) or deceased (1), using structured features such as mutation count, tumor location, and various biomarkers. The workflow includes preprocessing, model training, performance evaluation, and threshold tuning to optimize the model's clinical relevance.
 
----
-
 ### Dataset: MSK-CHORD (Nature 2024)
 
 The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, comprising over 25,000 tumors from 24,950 patients sequenced via **MSK-IMPACT**.
@@ -20,8 +18,6 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 - License: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 - Data Source – cBioPortal (https://www.cbioportal.org/study/summary?id=msk_chord_2024)
 
----
-
 ### Project Objectives
 
 - Extract and isolate pancreatic cancer cases from the broader MSK-CHORD dataset (25,000+ patients).
@@ -29,6 +25,8 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 - Build and evaluate machine learning models to classify survival outcomes (Alive vs. Deceased).
 - Interpret feature importance to identify potential prognostic biomarkers.
 - Demonstrate how the model could support personalized treatment and early risk counseling.
+
+---
 
 ### 2. Exploratory Data Analysis (EDA)
 
@@ -107,8 +105,6 @@ The best model, tuned XGBoost , was saved for deployment.
 * Low-risk patients may be placed under routine monitoring.
 * The model supports personalized care by stratifying patients based on risk scores, making it highly relevant in real-world oncology settings.
 
----
-
 ### 10. Findings and Recommendations
 
 **Key Findings**
@@ -127,11 +123,13 @@ The best model, tuned XGBoost , was saved for deployment.
 - Scale the model to regional hospitals, especially in resource-limited settings, since it only requires standard clinical/genomic data.
 
 ---
+
 ## Streamlit Application : [📄 View the App](./Presentation.pdf)
 
 ## Non-Technical Presentation : [📄 View the presentation](./Presentation.pdf)
 
 ---
+
 **Collaborators:**
 
 1. joshua karanja
