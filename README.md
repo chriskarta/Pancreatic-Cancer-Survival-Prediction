@@ -124,9 +124,9 @@ The best model, tuned XGBoost , was saved for deployment.
 
 ---
 
-## Streamlit Application : [📄 View the App](./Presentation.pdf)
+### Streamlit Application : [🌐 View the App](./Presentation.pdf)
 
-## Non-Technical Presentation : [📄 View the presentation](./Presentation.pdf)
+### Non-Technical Presentation : [📄 View the presentation](./Presentation.pdf)
 
 ---
 
