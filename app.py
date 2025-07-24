@@ -71,9 +71,8 @@ if None in [scaler, encoder, model]:
     st.error("Critical error: Failed to load required models. Please contact support.")
     st.stop()
 
-# Get feature names and add Sex (assuming original features are in scaler)
+# Get feature names (assuming original features are in scaler)
 original_features = list(scaler.feature_names_in_)
-feature_names = original_features + ['Sex_Male']  # Adding the encoded sex feature
 
 # Input form
 with st.form("patient_form"):
@@ -82,14 +81,13 @@ with st.form("patient_form"):
     col1, col2 = st.columns(2)
     
     with col1:
-        sex = st.radio("Sex", options=['Female', 'Male'], index=0)
         current_age = st.number_input("Current Age (years)", min_value=20, max_value=100, value=65)
         tumor_purity = st.slider("Tumor Purity", min_value=0, max_value=100, value=40, step=10)
-        sample_coverage = st.number_input("Sample Coverage (X)", min_value=10, max_value=1000, value=100)
+        overall_survival = st.number_input("Overall Survival (Months)", min_value=0, max_value=1000, value=100)
+        stage = st.selectbox("Stage (Highest Recorded)", options=["I", "II", "III", "IV"])
     
     with col2:
-        tmb = st.number_input("TMB (nonsynonymous mutations/Mb)", min_value=0, max_value=100, value=5)
-        msi_score = st.number_input("MSI Score", min_value=0.0, max_value=20.0, value=1.5, step=0.1)
+        tmb = st.number_input("TMB (nonsynonymous)", min_value=0, max_value=100, value=5)
         frac_genome_altered = st.slider("Fraction Genome Altered", min_value=0.0, max_value=1.0, value=0.3, step=0.01)
         mutation_count = st.number_input("Mutation Count", min_value=0, max_value=1000, value=50)
     
@@ -97,37 +95,35 @@ with st.form("patient_form"):
 
 # Prediction logic
 if submitted:
-    try:
-        # Create feature array with sex encoded (Male=1, Female=0)
-        sex_encoded = 1 if sex == 'Male' else 0
-        
-        # Create DataFrame with original features
-        features = pd.DataFrame({
+    try:        
+        # Create DataFrame with all features including stage
+        all_features = pd.DataFrame({
             'Current Age': [current_age],
             'Tumor Purity': [tumor_purity],
-            'Sample coverage': [sample_coverage],
+            'Overall Survival (Months)': [overall_survival],
             'TMB (nonsynonymous)': [tmb],
-            'MSI Score': [msi_score],
             'Fraction Genome Altered': [frac_genome_altered],
             'Mutation Count': [mutation_count],
-            'Sex_Male': [sex_encoded]  # Adding the encoded sex feature
-        })[feature_names]  # Ensure correct feature order
+            'Stage (Highest Recorded)': [stage]
+        })
         
-        # Scale the numerical features (excluding sex)
-        numerical_features = features[original_features]
-        scaled_numerical = scaler.transform(numerical_features)
+        # Separate features for scaling (exclude stage)
+        features_to_scale = all_features[original_features]
+        scaled_features = scaler.transform(features_to_scale)
         
-        # Combine scaled numerical features with categorical (sex)
-        final_features = np.column_stack([
-            scaled_numerical,
-            features['Sex_Male'].values
-        ])
+        # Combine scaled features with stage for prediction
+        stage_encoded = pd.DataFrame({
+            'Stage (Highest Recorded)': [{"I": 1, "II": 2, "III": 3, "IV": 4}[stage]]
+        })
+        
+        # Combine all features for prediction
+        final_features = np.hstack([scaled_features, stage_encoded])
         
         # Get predicted probabilities
         risk_score = model.predict_proba(final_features)[:, 1][0]
         
         # Risk stratification
-        fixed_threshold = 0.237  # 23.7% threshold for high risk
+        fixed_threshold = 0.4045
         risk_label = 'High Risk' if risk_score >= fixed_threshold else 'Low Risk'
         predicted_outcome = encoder.classes_[1] if risk_score >= fixed_threshold else encoder.classes_[0]
         
@@ -136,12 +132,12 @@ if submitted:
         
         cols = st.columns(3)
         with cols[0]:
-            st.metric("Risk Score", f"{risk_score:.1%}")
+            st.metric("Risk Score", f"{float(risk_score):.1%}")
         with cols[1]:
             st.metric("Risk Level", risk_label)
         
-        # Visual indicator
-        st.progress(risk_score)
+        # Progress bar 
+        st.progress(float(risk_score))
         st.caption(f"Threshold for high risk: {fixed_threshold:.1%}")
 
         # Clinical interpretation
@@ -163,21 +159,7 @@ if submitted:
             - Consider clinical trials
             - 3-month monitoring intervals
             - Early supportive care
-            """)
-        
-        # Feature importance visualization
-        if hasattr(model, 'feature_importances_'):
-            st.subheader("🔍 Feature Importance")
-            
-            importance_df = pd.DataFrame({
-                'Feature': feature_names,
-                'Importance': model.feature_importances_
-            }).sort_values('Importance', ascending=False)
-            
-            fig, ax = plt.subplots(figsize=(10, 4))
-            sns.barplot(x='Importance', y='Feature', data=importance_df, ax=ax)
-            ax.set_title("Relative Importance of Predictive Features")
-            st.pyplot(fig)     
+            """)    
         
     except Exception as e:
         st.error(f"Prediction failed: {str(e)}")
@@ -187,20 +169,19 @@ with st.sidebar:
     st.header("Model Information")
     st.markdown(f"""
     **Model Characteristics:**
-    - Prediction threshold: 23.7%
-    - Features used: {len(feature_names)} variables
+    - Prediction threshold: 40.45%
+    - Features used: {len(original_features)} variables
     - Includes demographic and molecular factors
-    - Outcome classes: {encoder.classes_[0]} (0), {encoder.classes_[1]} (1)
     """)
     
     st.markdown("---")
     st.markdown("""
     **Key Features:**
     - Current Age
-    - Sex (Male/Female)
+    - Overall Survival (Months)
     - Tumor Purity
+    - Stage
     - TMB (Tumor Mutational Burden)
-    - MSI Score
     - Fraction Genome Altered
     - Mutation Count
     """)
