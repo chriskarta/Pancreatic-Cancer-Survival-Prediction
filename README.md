@@ -1,4 +1,4 @@
-## 🧬Pancreatic Cancer Survival Prediction Project
+## 🧬Pancreatic Cancer Risk Identification and Treatment Recommendation Project
 
 This project explores how machine learning models can help predict the survival outcome of pancreatic cancer patients based on a mix of clinical and genomic data. The goal is to support clinicians in identifying high-risk patients for prioritized intervention and personalized treatment strategies.
 
@@ -18,7 +18,7 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 - Features include age, stage, TMB, tumor purity, mutation count, sample class, and more
 - Subset: 3,109 pancreatic cancer patient records
 - License: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-- Data Source – cBioPortal](https://www.cbioportal.org/study/summary?id=msk_chord_2024)
+- Data Source – cBioPortal (https://www.cbioportal.org/study/summary?id=msk_chord_2024)
 
 ---
 
@@ -30,15 +30,15 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 - Interpret feature importance to identify potential prognostic biomarkers.
 - Demonstrate how the model could support personalized treatment and early risk counseling.
 
-### 3. Exploratory Data Analysis (EDA)
+### 2. Exploratory Data Analysis (EDA)
 
 Initial EDA provided insights into class imbalance, common tumor sites, and feature distributions. For example, mutation counts were generally low, and both genders were affected somewhat equally. Descriptive statistics and visualizations helped guide preprocessing and model selection.
 
-### 4. Model Development
+### 3. Model Development
 
 Three classification models were developed and evaluated:
 
-#### 4.1 Logistic Regression
+#### 3.1 Logistic Regression
 
 As a baseline model, Logistic Regression is simple, fast, and interpretable. Its main strength lies in the clear understanding of coefficients and their impact on predictions.
 
@@ -46,7 +46,7 @@ As a baseline model, Logistic Regression is simple, fast, and interpretable. Its
 * Weaknesses : However, it performs poorly for class 0, which may lead to overestimation of mortality risk.
 * Overall: Logistic Regression provides a good starting point with an AUC-ROC of 0.7688.
 
-#### 4.2 Random Forest Classifier
+#### 3.2 Random Forest Classifier
 
 Random Forests are ensemble models that aggregate multiple decision trees to improve generalization. This model captured non-linear relationships and interactions between features better than Logistic Regression.
 
@@ -62,7 +62,7 @@ XGBoost is a powerful gradient boosting framework designed to handle structured 
 * Weaknesses: Precision and recall for class 0 are still limited (0.62 and 0.54 ).
 * Overall: XGBoost showed the best balance between predictive performance and model consistency, even before tuning.
 
-### 5. Cross-Validation
+### 4. Cross-Validation
 
 5-fold cross-validation was used to evaluate model generalizability. Mean ROC-AUC and standard deviation were reported:
 
@@ -72,7 +72,7 @@ XGBoost is a powerful gradient boosting framework designed to handle structured 
 
 Logistic Regression had the best cross-validated ROC-AUC, but XGBoost performed better on the test set, making it more suitable for deployment.
 
-### 6. Hyperparameter Tuning
+### 5. Hyperparameter Tuning
 
 GridSearchCV was used to fine-tune Random Forest and XGBoost models:
 
@@ -81,7 +81,7 @@ GridSearchCV was used to fine-tune Random Forest and XGBoost models:
 
 These results confirmed XGBoost as the best-performing model overall.
 
-### 7. Threshold Tuning and Risk Stratification
+### 6. Threshold Tuning and Risk Stratification
 
 Rather than using the default 0.5 threshold, the model was optimized based on F1-score. The optimal threshold was found to be **0.4332**.
 
@@ -93,15 +93,15 @@ Rather than using the default 0.5 threshold, the model was optimized based on F1
 
 Patients were stratified as **High Risk** (score ≥ 0.4332) or **Low Risk** based on this cutoff, improving clinical interpretability.
 
-### 8. Feature Importance
+### 7. Feature Importance
 
 Feature importances were extracted from both Random Forest and XGBoost models. Top features (e.g., Mutation Count, Stage, TMB) aligned with known clinical indicators, supporting model credibility.
 
-### 9. Model Deployment
+### 8. Model Deployment
 
 The best model, tuned XGBoost , was saved for deployment.
 
-### 10. Clinical Utility Summary
+### 9. Clinical Utility Summary
 
 * High-risk patients can be targeted for aggressive or experimental treatments.
 * Low-risk patients may be placed under routine monitoring.
@@ -109,14 +109,14 @@ The best model, tuned XGBoost , was saved for deployment.
 
 ---
 
-### 11. Findings and Recommendations
+### 10. Findings and Recommendations
 
 **Key Findings**
 
 - The majority of patients in the dataset did not survive, highlighting the need for early, data-driven risk prediction in pancreatic cancer.
 - The best-performing model (XGBoost with tuned threshold) achieved high recall (0.93) for identifying deceased patients — ideal for catching high-risk cases early.
 - Tumor stage ,mutation count, and MSI score were the most important features — emphasizing the role of genomic profiling in survival prediction.
-- 🆘 Living patients were harder to predict accurately, suggesting missing or underrepresented recovery-related data.
+- Living patients were harder to predict accurately, suggesting missing or underrepresented recovery-related data.
 
 **Recommendations**
 
@@ -127,6 +127,7 @@ The best model, tuned XGBoost , was saved for deployment.
 - Scale the model to regional hospitals, especially in resource-limited settings, since it only requires standard clinical/genomic data.
 
 ---
+## Streamlit Application : [📄 View the App](./Presentation.pdf)
 
 ## Non-Technical Presentation : [📄 View the presentation](./Presentation.pdf)
 
