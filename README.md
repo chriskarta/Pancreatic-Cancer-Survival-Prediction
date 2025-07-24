@@ -1,27 +1,14 @@
-# 🧬 Pancreatic Cancer Survival Prediction Project
+## 🧬Pancreatic Cancer Survival Prediction Project
 
-## Introduction
-
-Pancreatic cancer is one of the most lethal malignancies worldwide, with a five-year survival rate of less than 10%. This is largely due to late-stage diagnosis and the aggressive nature of the disease. Predicting survival at diagnosis remains a major challenge in oncology and limits clinicians’ ability to personalize care and allocate treatments effectively.
-
-With the increasing availability of clinical and genomic data, machine learning offers a promising approach to improving the accuracy of survival prediction and supporting evidence-based decision-making in pancreatic cancer management.
+This project explores how machine learning models can help predict the survival outcome of pancreatic cancer patients based on a mix of clinical and genomic data. The goal is to support clinicians in identifying high-risk patients for prioritized intervention and personalized treatment strategies.
 
 ---
 
-## Problem Statement
+### 1. Project Overview
 
-Despite the rich availability of clinical and genomic data, survival prediction in pancreatic cancer is still largely based on general staging systems. There is a lack of robust tools that can personalize prognosis for individual patients.
+Pancreatic cancer is known for its poor prognosis and late detection. This project aims to build predictive models to classify patients into two categories: living (0) or deceased (1), using structured features such as mutation count, tumor location, and various biomarkers. The workflow includes preprocessing, model training, performance evaluation, and threshold tuning to optimize the model's clinical relevance.
 
-This project aims to develop a machine learning model that predicts survival outcomes for pancreatic cancer patients using a curated clinical-genomic dataset. The ultimate goal is to improve risk stratification and aid clinical decision-making.
-
-## Project Objectives
-
-- Extract and isolate pancreatic cancer cases from the broader MSK-CHORD dataset (25,000+ patients).
-- Clean and preprocess clinical, pathological, and genomic features 
-- Build and evaluate machine learning models to classify survival outcomes (Alive vs. Deceased).
-- Interpret feature importance to identify potential prognostic biomarkers.
-- Demonstrate how the model could support personalized treatment and early risk counseling.
-
+---
 
 ## Dataset: MSK-CHORD (Nature 2024)
 
@@ -33,27 +20,122 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 - License: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 - Data Source – cBioPortal](https://www.cbioportal.org/study/summary?id=msk_chord_2024)
 
+---
 
-## Data Preprocessing
+## Project Objectives
 
-- Filtered the dataset to only include records where is Pancreatic
-- Handled missing values and selected relevant clinical and molecular features
-- Encoded categorical values and scaled numeric columns
-- Defined target variable which is the Overall Survival Status
+- Extract and isolate pancreatic cancer cases from the broader MSK-CHORD dataset (25,000+ patients).
+- Clean and preprocess clinical, pathological, and genomic features 
+- Build and evaluate machine learning models to classify survival outcomes (Alive vs. Deceased).
+- Interpret feature importance to identify potential prognostic biomarkers.
+- Demonstrate how the model could support personalized treatment and early risk counseling.
 
-## Exploratory Data Analysis (EDA)
+### 3. Exploratory Data Analysis (EDA)
 
-- Distribution of survival status and tumor stage
-- Age, Tumor Mutational Burden (TMB), Tumor Purity trends
-- Correlation heatmaps of numeric features
-- Visual exploration of top predictors by class
+Initial EDA provided insights into class imbalance, common tumor sites, and feature distributions. For example, mutation counts were generally low, and both genders were affected somewhat equally. Descriptive statistics and visualizations helped guide preprocessing and model selection.
 
-## Potential Impact
+### 4. Model Development
 
-- Improved risk stratification at diagnosis
-- Enhanced treatment planning
-- Better patient counseling and clinical trial selection
+Three classification models were developed and evaluated:
 
+#### 4.1 Logistic Regression
 
+As a baseline model, Logistic Regression is simple, fast, and interpretable. Its main strength lies in the clear understanding of coefficients and their impact on predictions.
 
+* Strengths : High recall for class 1 (0.91) suggests that the model correctly identifies most patients who are deceased.
+* Weaknesses : However, it performs poorly for class 0, which may lead to overestimation of mortality risk.
+* Overall: Logistic Regression provides a good starting point with an AUC-ROC of 0.7688.
+
+#### 4.2 Random Forest Classifier
+
+Random Forests are ensemble models that aggregate multiple decision trees to improve generalization. This model captured non-linear relationships and interactions between features better than Logistic Regression.
+
+* Strengths : High recall (0.88) and precision (0.80) for class 1 make it strong in identifying deceased patients.
+* Weaknesses : It still struggles with class 0 , meaning many living patients are misclassified as deceased.
+* Overall: AUC-ROC improved to 0.7902 compared to Logistic Regression.
+
+#### 4.3 XGBoost Classifier
+
+XGBoost is a powerful gradient boosting framework designed to handle structured and imbalanced datasets. It generally outperforms simpler models in complex tasks.
+
+* Strengths: Excellent recall (0.85) and F1-score (0.82) for class 1. XGBoost handles class imbalance well, with a robust AUC of 0.8027.
+* Weaknesses: Precision and recall for class 0 are still limited (0.62 and 0.54 ).
+* Overall: XGBoost showed the best balance between predictive performance and model consistency, even before tuning.
+
+### 5. Cross-Validation
+
+5-fold cross-validation was used to evaluate model generalizability. Mean ROC-AUC and standard deviation were reported:
+
+* **Logistic Regression**: 0.7530 ± 0.0761
+* **Random Forest**: 0.6647 ± 0.0647
+* **XGBoost**: 0.6409 ± 0.0726
+
+Logistic Regression had the best cross-validated ROC-AUC, but XGBoost performed better on the test set, making it more suitable for deployment.
+
+### 6. Hyperparameter Tuning
+
+GridSearchCV was used to fine-tune Random Forest and XGBoost models:
+
+* **Tuned Random Forest**: Slight improvement to AUC-ROC (0.8040). Class 1 metrics remained strong, while class 0 still had recall issues (0.53).
+* **Tuned XGBoost**: Achieved the highest AUC-ROC (0.8237). Recall for class 1 improved to 0.87, and F1-score rose to 0.85.
+
+These results confirmed XGBoost as the best-performing model overall.
+
+### 7. Threshold Tuning and Risk Stratification
+
+Rather than using the default 0.5 threshold, the model was optimized based on F1-score. The optimal threshold was found to be **0.4332**.
+
+* At this threshold:
+
+  * Class 1 Recall: 0.93
+  * Class 0 Precision: 0.77
+  * Accuracy: 0.80
+
+Patients were stratified as **High Risk** (score ≥ 0.4332) or **Low Risk** based on this cutoff, improving clinical interpretability.
+
+### 8. Feature Importance / Model Evaluation
+
+Feature importances were extracted from both Random Forest and XGBoost models. Top features (e.g., Mutation Count, Stage, TMB) aligned with known clinical indicators, supporting model credibility.
+
+### 9. Model Deployment/Recommendation Model Analysis
+
+The best model, tuned XGBoost , was saved for deployment.
+
+### 10. Clinical Utility Summary
+
+* High-risk patients can be targeted for aggressive or experimental treatments.
+* Low-risk patients may be placed under routine monitoring.
+* The model supports personalized care by stratifying patients based on risk scores, making it highly relevant in real-world oncology settings.
+
+---
+
+### Findings and Recommendations
+
+**Key Findings**
+
+- The majority of patients in the dataset did not survive, highlighting the need for early, data-driven risk prediction in pancreatic cancer.
+- The best-performing model (XGBoost with tuned threshold) achieved high recall (0.93) for identifying deceased patients — ideal for catching high-risk cases early.
+- Tumor stage ,mutation count, and MSI score were the most important features — emphasizing the role of genomic profiling in survival prediction.
+- 🆘 Living patients were harder to predict accurately, suggesting missing or underrepresented recovery-related data.
+
+**Recommendations**
+
+- Use the model for early risk stratification at the point of diagnosis or treatment planning.
+- Enhance data collection for survivors by capturing post-treatment outcomes, lifestyle variables, and co-morbidities.
+- Integrate the model in clinical workflows to support ICU triage, follow-up scheduling, and palliative care prioritization.
+- Use in clinical trials to select high-risk candidates more effectively, improving study design and therapeutic outcomes.
+- Scale the model to regional hospitals, especially in resource-limited settings, since it only requires standard clinical/genomic data.
+
+---
+
+## Non-Technical Presentation : [📄 View the presentation](./Presentation.pdf)
+
+---
+**Collaborators:**
+
+1. joshua karanja
+2. michelle chekwoti
+3. myrajoy kiganane
+4. christopher katimbwa
+5. robert sumaili
 
