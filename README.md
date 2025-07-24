@@ -10,7 +10,7 @@ Pancreatic cancer is known for its poor prognosis and late detection. This proje
 
 ---
 
-## Dataset: MSK-CHORD (Nature 2024)
+### Dataset: MSK-CHORD (Nature 2024)
 
 The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, comprising over 25,000 tumors from 24,950 patients sequenced via **MSK-IMPACT**.
 
@@ -22,7 +22,7 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 
 ---
 
-## Project Objectives
+### Project Objectives
 
 - Extract and isolate pancreatic cancer cases from the broader MSK-CHORD dataset (25,000+ patients).
 - Clean and preprocess clinical, pathological, and genomic features 
@@ -93,11 +93,11 @@ Rather than using the default 0.5 threshold, the model was optimized based on F1
 
 Patients were stratified as **High Risk** (score ≥ 0.4332) or **Low Risk** based on this cutoff, improving clinical interpretability.
 
-### 8. Feature Importance / Model Evaluation
+### 8. Feature Importance
 
 Feature importances were extracted from both Random Forest and XGBoost models. Top features (e.g., Mutation Count, Stage, TMB) aligned with known clinical indicators, supporting model credibility.
 
-### 9. Model Deployment/Recommendation Model Analysis
+### 9. Model Deployment
 
 The best model, tuned XGBoost , was saved for deployment.
 
@@ -109,7 +109,7 @@ The best model, tuned XGBoost , was saved for deployment.
 
 ---
 
-### Findings and Recommendations
+### 11. Findings and Recommendations
 
 **Key Findings**
 
