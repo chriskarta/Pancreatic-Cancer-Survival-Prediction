@@ -4,22 +4,11 @@ This project explores how machine learning models can help predict the survival 
 
 ---
 
-### 1. Project Overview
-
+###  Introduction and Background
 Pancreatic cancer is known for its poor prognosis and late detection. This project aims to build predictive models to classify patients into two categories: living (0) or deceased (1), using structured features such as mutation count, tumor location, and various biomarkers. The workflow includes preprocessing, model training, performance evaluation, and threshold tuning to optimize the model's clinical relevance.
 
-### Dataset: MSK-CHORD (Nature 2024)
-
-The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, comprising over 25,000 tumors from 24,950 patients sequenced via **MSK-IMPACT**.
-
-- Genomic + Clinical data
-- Features include age, stage, TMB, tumor purity, mutation count, sample class, and more
-- Subset: 3,109 pancreatic cancer patient records
-- License: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-- Data Source – cBioPortal (https://www.cbioportal.org/study/summary?id=msk_chord_2024)
 
 ### Project Objectives
-
 - Extract and isolate pancreatic cancer cases from the broader MSK-CHORD dataset (25,000+ patients).
 - Clean and preprocess clinical, pathological, and genomic features 
 - Build and evaluate machine learning models to classify survival outcomes (Alive vs. Deceased).
@@ -28,15 +17,37 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 
 ---
 
+### 1. Data Understanding ( Dataset: MSK-CHORD (Nature 2024) )
+The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, comprising over 25,000 tumors from 24,950 patients sequenced via **MSK-IMPACT**.
+
+- Genomic + Clinical data
+- Features include age, stage, TMB, tumor purity, mutation count, sample class, and more
+- Subset: 3,109 pancreatic cancer patient records
+- License: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+- Data Source – cBioPortal (https://www.cbioportal.org/study/summary?id=msk_chord_2024)
+
 ### 2. Exploratory Data Analysis (EDA)
 
-Initial EDA provided insights into class imbalance, common tumor sites, and feature distributions. For example, mutation counts were generally low, and both genders were affected somewhat equally. Descriptive statistics and visualizations helped guide preprocessing and model selection.
+This included filtering for specifically Pancreatic cancer.
+Dropping columns that will not be used and identifying missing values eg Nulls.
 
-### 3. Model Development
+### 3. Exploratory Data Analysis (EDA)
 
+Initial EDA provided insights into Age, common tumor sites, and feature distributions. 
+
+#### Age distribution of the patients
+<img src="https://github.com/user-attachments/assets/7dce2ab6-2700-475b-98ec-545a48e4b78f" width="600"/>
+
+#### Stage distribution with the survival metrics
+<img src="https://github.com/user-attachments/assets/dc1a52ac-5000-4f51-9d48-c1dcb7ebb8bf" width="600"/>
+
+#### Smoking History vs Survival
+<img src="https://github.com/user-attachments/assets/50a736c0-52ac-4dd5-9f6a-3ff6335c969a" width="600"/>
+
+### 4. Model Development
 Three classification models were developed and evaluated:
 
-#### 3.1 Logistic Regression
+#### 4.1 Logistic Regression
 
 As a baseline model, Logistic Regression is simple, fast, and interpretable. Its main strength lies in the clear understanding of coefficients and their impact on predictions.
 
